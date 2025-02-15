@@ -53,6 +53,7 @@ class SendTab extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const SizedBox(height: 20),
+            // 当前选择的文件为空；展示当前设备可选传输类型
             if (vm.selectedFiles.isEmpty) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
@@ -66,6 +67,7 @@ class SendTab extends StatelessWidget {
                 outerVerticalPadding: 10,
                 childPadding: 10,
                 minChildWidth: buttonWidth,
+                // 当前设备可选传输类型
                 children: _options.map((option) {
                   return BigButton(
                     icon: option.icon,
@@ -165,6 +167,7 @@ class SendTab extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: _horizontalPadding),
+                // 附近的设备
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -172,6 +175,7 @@ class SendTab extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
+                // 扫描按钮
                 _ScanButton(
                   ips: vm.localIps,
                 ),
@@ -194,6 +198,7 @@ class SendTab extends StatelessWidget {
                 ),
               ],
             ),
+            // 附近没有设备
             if (vm.nearbyDevices.isEmpty)
               const Padding(
                 padding: EdgeInsets.only(bottom: 10, left: _horizontalPadding, right: _horizontalPadding),
@@ -202,6 +207,7 @@ class SendTab extends StatelessWidget {
                   child: DevicePlaceholderListTile(),
                 ),
               ),
+            // 附近有设备
             ...vm.nearbyDevices.map((device) {
               final favoriteEntry = vm.favoriteDevices.findDevice(device);
               return Padding(
@@ -219,7 +225,9 @@ class SendTab extends StatelessWidget {
                           device: device,
                           isFavorite: favoriteEntry != null,
                           nameOverride: favoriteEntry?.alias,
+                          // 收藏设备
                           onFavoriteTap: () async => await vm.onToggleFavorite(context, device),
+                          // 点击设备，跳转到发送页面
                           onTap: () async => await vm.onTapDevice(context, device),
                         ),
                 ),
