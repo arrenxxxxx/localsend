@@ -10,6 +10,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import androidx.annotation.NonNull
 
 
 private const val CHANNEL = "org.localsend.localsend_app/localsend"
@@ -20,7 +21,7 @@ private const val REQUEST_CODE_PICK_FILE = 3
 class MainActivity : FlutterActivity() {
     private var pendingResult: MethodChannel.Result? = null
 
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -52,6 +53,24 @@ class MainActivity : FlutterActivity() {
                 "openGallery" -> {
                     openGallery()
                     result.success(null)
+                }
+
+                "putLivePhoto" -> {
+                    val imagePath = call.argument<String>("imagePath")
+                    val videoPath = call.argument<String>("videoPath")
+                    val album = call.argument<String?>("album")
+                    
+                    if (imagePath == null || videoPath == null) {
+                        result.error("INVALID_ARGUMENTS", "Image path and video path must not be null", null)
+                        return@setMethodCallHandler
+                    }
+                    
+                    try {
+                        LivePhotoHandler(this).saveLivePhoto(imagePath, videoPath, album)
+                        result.success(null)
+                    } catch (e: Exception) {
+                        result.error("SAVE_FAILED", "Failed to save live photo", e.message)
+                    }
                 }
 
                 else -> result.notImplemented()
