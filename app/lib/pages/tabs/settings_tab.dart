@@ -237,7 +237,7 @@ class SettingsTab extends StatelessWidget {
                       label: t.settingsTab.receive.saveAsLivePhoto,
                       value: vm.settings.saveAsLivePhoto,
                       onChanged: (b) async {
-                        await ref.notifier(settingsProvider).setSaveToGallery(b);
+                        await ref.notifier(settingsProvider).setSaveAsLivePhoto(b);
                       },
                     ),
                 _BooleanEntry(
